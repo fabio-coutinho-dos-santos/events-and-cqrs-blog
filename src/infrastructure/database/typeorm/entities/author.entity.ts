@@ -1,16 +1,19 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('authors')
-export default class Author {
+export default class AuthorModel {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @Column()
+  @Column({nullable: false})
+  age: number
+
+  @Column({nullable: false})
   name: string
 
-  @Column()
+  @Column({nullable: false})
   email: string
 
-  @Column()
+  @Column({nullable: false})
   bio: string
 }

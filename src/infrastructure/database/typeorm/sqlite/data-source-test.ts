@@ -1,10 +1,12 @@
 import { DataSource } from "typeorm";
+import AuthorModel from "../entities/author.entity";
 
 export function ormconfig (): any {
   const config = {
     type: 'sqlite',
-    database: './data.sqlite',
-    entities: [`${__dirname}/../**/entities/*{ts, js}`],
+    // database: './data.sqlite',
+    database: ':memory:',
+    entities: [AuthorModel],
     synchronize: true,
     logging: false,
     migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
@@ -12,4 +14,4 @@ export function ormconfig (): any {
   return config;
 }
 
-export const AppDataSource = new DataSource(ormconfig());
+export const AppDataSourceTest = new DataSource(ormconfig());
