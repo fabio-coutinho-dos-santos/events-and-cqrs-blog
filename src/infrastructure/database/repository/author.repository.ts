@@ -1,6 +1,6 @@
 import { DataSource, EntityRepository, Repository, getCustomRepository, getRepository } from "typeorm";
 import Author from "../../../domain/author/entity/author.entity";
-import AuthorRepositoryInterface from "../../../domain/author/repository/author.repository";
+import AuthorRepositoryInterface from "../../../domain/author/repository/author.repository.Inteface";
 import AuthorModel from "../typeorm/entities/author.entity";
 
 export class AuthorRepository implements AuthorRepositoryInterface {

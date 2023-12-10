@@ -1,7 +1,6 @@
 import express from 'express'
 import routes from './routes';
 import { AppDataSource } from './infrastructure/database/typeorm/sqlite/data-source';
-import { AppDataSourceTest } from './infrastructure/database/typeorm/sqlite/data-source-test';
 
 const port = 3000;
 

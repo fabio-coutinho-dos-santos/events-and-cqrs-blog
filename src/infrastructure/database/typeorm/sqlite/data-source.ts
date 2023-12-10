@@ -1,9 +1,10 @@
 import { DataSource } from "typeorm";
+import 'dotenv/config'
 
 export function ormconfig (): any {
   const config = {
     type: 'sqlite',
-    database: './data.sqlite',
+    database: process.env.NODE_ENV === 'test' ? ':memory:' : './data.sqlite',
     entities: [`${__dirname}/../**/entities/*{ts, js}`],
     synchronize: true,
     logging: false,
