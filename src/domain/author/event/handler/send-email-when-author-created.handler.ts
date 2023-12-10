@@ -3,6 +3,7 @@ import { AuthorCreatedEvent } from "../author-created.event";
 
 export default class SendEmailWhenAuthorCreatedHandler implements EventHandlerInterface<AuthorCreatedEvent> {
   handle(event: AuthorCreatedEvent): void {
+    console.log(event);
     console.log('Sending email...');
   }
 }
