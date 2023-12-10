@@ -40,6 +40,10 @@ export default class AuthorController {
         this.sendEmailEventHandler
       )
       this.eventDispatcher.notify(authorCreatedEvent);
+      this.eventDispatcher.unregister(
+        authorCreatedEvent.constructor.name, 
+        this.sendEmailEventHandler
+      )
       resp.status(201).json(authorCreated);
     } catch(error: any) {
       console.log(error)
