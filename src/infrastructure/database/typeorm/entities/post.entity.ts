@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('posts')
-export default class Post {
+export default class PostModel {
   @PrimaryGeneratedColumn('increment')
   id: number
 
