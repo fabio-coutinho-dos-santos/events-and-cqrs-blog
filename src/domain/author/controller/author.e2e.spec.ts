@@ -1,8 +1,7 @@
-import { AppDataSourceTest } from "../infrastructure/database/typeorm/sqlite/data-source-test"
 import express from 'express'
 import supertest from 'supertest'
-import routes from "../routes";
-import { AppDataSource } from "../infrastructure/database/typeorm/sqlite/data-source";
+import routes from "../../../routes";
+import { AppDataSource } from "../../../infrastructure/database/typeorm/sqlite/data-source";
 
 describe('Author routes tests', () => {
 

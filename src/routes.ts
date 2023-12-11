@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AuthorController from "./controllers/author.controller";
+import AuthorController from "./domain/author/controller/author.controller";
 import { AuthorRepository } from "./infrastructure/database/repository/author.repository";
 import { AppDataSource } from "./infrastructure/database/typeorm/sqlite/data-source";
 
