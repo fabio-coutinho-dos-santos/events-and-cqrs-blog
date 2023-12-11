@@ -3,11 +3,14 @@ import { CommandFactory } from "../../@shared/command/command.factory";
 import EventDispatcher from "../../@shared/event/event-dispatcher";
 import EventDispatcherInterface from "../../@shared/event/event-dispatcher.interface";
 import EventHandlerInterface from "../../@shared/event/event-handler.interface";
+import QueryFactory from "../../@shared/query/query-factory";
+import { QueryNames } from "../../@shared/query/query-names.enum";
 import CommandCreateAuthorHandler from "../command/create-author.handler";
 import AuthorDto from "../dto/author.dto";
 import Author from "../entity/author.entity";
 import { AuthorCreatedEvent } from "../event/author-created.event";
 import SendEmailWhenAuthorCreatedHandler from "../event/handler/send-email-when-author-created.handler";
+import GetAllAuthorsQueryHandler from "../query/get-all-authors.handler";
 import AuthorRepositoryInterface from "../repository/author.repository.Inteface";
 import { Response, Request, NextFunction } from "express";
 
@@ -70,7 +73,10 @@ export default class AuthorController {
 
   async getAll(req: Request, resp: Response, next: NextFunction) {
     try {
-      const authors = await this.authorRepository.findAll()
+      const query = QueryFactory.createQuery(QueryNames.GET_ALL_AUTHORS, {
+        repository: this.authorRepository
+      })
+      const authors = await new GetAllAuthorsQueryHandler().execute(query)
       resp.status(200).json(authors);
     } catch (error: any) {
       console.log(error)
