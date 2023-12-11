@@ -1,5 +1,5 @@
 import { CommandInterface } from "../../@shared/command/command.interface";
-import CommandCreateObjectInterface from "../../@shared/command/create-object.interface";
+import CommandCreateObjectInterface from "../../@shared/command/command-create-object.interface";
 import Author from "../entity/author.entity";
 
 export class CreateAuthorCommand implements CommandInterface{
