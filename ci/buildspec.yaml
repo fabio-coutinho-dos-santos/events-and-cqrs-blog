@@ -21,7 +21,7 @@ phases: # can be -> install | pre-build | build | post_build
 
       - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
 
-      - SHORT_COMMIT_HASH=$(git rev-parse --short ${CODEBUILD_RESOLVED_SOURCE_VERSION})
+      - SHORT_COMMIT_HASH=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION} | cut -b -8)
       - encho ${SHORT_COMMIT_HASH}
 
       - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${SHORT_COMMIT_HASH}"
@@ -39,3 +39,24 @@ phases: # can be -> install | pre-build | build | post_build
 
       # Push Docker image to ECR
       - docker push ${ECR_IMAGE_URI}
+
+      # to push the image on ECR is necessary give the follow permision to role atached in the cloudbuild project:
+      # {
+      #   "Version": "2012-10-17",
+      #   "Statement": [
+      #       {
+      #           "Effect": "Allow",  
+      #           "Action": [
+      #               "ecr:BatchCheckLayerAvailability",
+      #               "ecr:CompleteLayerUpload",
+      #               "ecr:GetAuthorizationToken",
+      #               "ecr:InitiateLayerUpload",
+      #               "ecr:PutImage",
+      #               "ecr:UploadLayerPart"
+      #             ],
+      #           "Resource": "*"
+      #       }
+      #   ]
+      # }
+      # to apply this permission will need to go to IAM->Roles, select the <cloudbuild-project-role> create a inline permission with the content above
+
