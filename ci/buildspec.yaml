@@ -23,7 +23,7 @@ phases:
 
       - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
 
-  push-image:
+  post_build:
     commands:
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_MAIN_URI}
 
