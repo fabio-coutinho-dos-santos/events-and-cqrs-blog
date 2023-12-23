@@ -19,6 +19,16 @@
 # }
 # to apply this permission will need to go to IAM->Roles, select the <cloudbuild-project-role> create a inline permission with the content above
 
+# variables come from CodeBuild project environment
+# ACCOUNT_ID
+# ECR_REPO_NAME
+#==========================================
+
+# variables come from CodeBuild process
+# AWS_REGION
+# CODEBUILD_RESOLVED_SOURCE_VERSION = commit sha complete
+#==========================================
+
 version: 0.2
 
 phases: # can be -> install | pre-build | build | post_build
@@ -27,24 +37,19 @@ phases: # can be -> install | pre-build | build | post_build
     commands:
       - npm install
 
-  pre-build:
+  pre_build:
     commands:
-      # Variables come from CodeBuild project environment
-      - echo ${AWS_REGION}
-      - echo ${ACCOUNT_ID}
-      - echo ${ECR_REPO_NAME}
-      #===============================================
-
+    
       - ECR_MAIN_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-      - echo ${ECR_MAIN_URI}
+      # - echo ${ECR_MAIN_URI}
 
-      - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      # - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
 
       - SHORT_COMMIT_HASH=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION} | cut -b -8)
-      - echo ${SHORT_COMMIT_HASH}
+      # - echo ${SHORT_COMMIT_HASH}
 
       - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${SHORT_COMMIT_HASH}"
-      - echo ${ECR_IMAGE_URI}
+      # - echo ${ECR_IMAGE_URI}
 
   build:
     commands:
