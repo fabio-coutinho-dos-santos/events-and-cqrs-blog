@@ -5,16 +5,16 @@ phases:
     commands:
       - npm install
 
-  # build:
-  #   commands:
-  #     - npm test
+  build:
+    commands:
+      - npm test
 
   post_build:
     commands:
-      - echo "REGION: $REGION"
-      - echo "ACCOUNT_ID: $ACCOUNT_ID"
-      - echo "ECR_REPO_NAME: $ECR_REPO_NAME"
-      - echo "IMAGE_NAME: $IMAGE_NAME"
+      # - echo "REGION: $REGION"
+      # - echo "ACCOUNT_ID: $ACCOUNT_ID"
+      # - echo "ECR_REPO_NAME: $ECR_REPO_NAME"
+      # - echo "IMAGE_NAME: $IMAGE_NAME"
 
       # Build Docker image
       - docker build -t $ECR_REPO_NAME/$IMAGE_NAME .
