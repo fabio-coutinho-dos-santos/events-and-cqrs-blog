@@ -3,8 +3,6 @@ version: 0.2
 phases:
   install:
     commands:
-      - yum install -y nodejs npm
-      - npm -v
       - npm install
 
   # build:
