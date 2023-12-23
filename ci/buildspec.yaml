@@ -22,7 +22,7 @@ phases: # can be -> install | pre-build | build | post_build
       - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
 
       - SHORT_COMMIT_HASH=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION} | cut -b -8)
-      - encho ${SHORT_COMMIT_HASH}
+      - echo ${SHORT_COMMIT_HASH}
 
       - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${SHORT_COMMIT_HASH}"
       - echo ${ECR_IMAGE_URI}
