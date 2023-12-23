@@ -5,22 +5,30 @@ phases:
     commands:
       - npm install
 
-  # build:
-  #   commands:
-  #     - npm test
+  build:
+    commands:
+      # - npm test
+      - echo ${AWS_REGION}
+      - echo ${ACCOUNT_ID}
+      - echo ${ECR_REPO_NAME}
+      - echo ${IMAGE_NAME}
+      
+      - ECR_MAIN_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+      - echo ${ECR_MAIN_URI}
+
+      - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest"
+      - echo ${ECR_IMAGE_URI}
+
 
   post_build:
     commands:
-      - echo $REGION
-      - echo $ACCOUNT_ID
-      - echo $ECR_REPO_NAME
-      - echo $IMAGE_NAME
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_MAIN_URI}
 
       # Build Docker image
-      - docker build -t $ECR_REPO_NAME/$IMAGE_NAME .
+      - docker build -t ${ECR_REPO_NAME} .
 
       # Tag Docker image
-      - docker tag $ECR_REPO_NAME/$IMAGE_NAME:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO_NAME:latest
+      - docker tag ${ECR_REPO_NAME}:latest ${ECR_IMAGE_URI}
 
       # Push Docker image to ECR
-      - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$ECR_REPO_NAME:latest
+      - docker push ${ECR_IMAGE_URI}
