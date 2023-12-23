@@ -19,10 +19,13 @@ phases: # can be -> install | pre-build | build | post_build
       - ECR_MAIN_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
       - echo ${ECR_MAIN_URI}
 
-      - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${CODEBUILD_RESOLVED_SOURCE_VERSION}"
-      - echo ${ECR_IMAGE_URI}
-
       - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
+
+      - SHORT_COMMIT_HASH=$(git rev-parse --short ${CODEBUILD_RESOLVED_SOURCE_VERSION})
+      - encho ${SHORT_COMMIT_HASH}
+
+      - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${SHORT_COMMIT_HASH}"
+      - echo ${ECR_IMAGE_URI}
 
   post_build:
     commands:
@@ -32,7 +35,7 @@ phases: # can be -> install | pre-build | build | post_build
       - docker build -t ${ECR_REPO_NAME} .
 
       # Tag Docker image
-      - docker tag ${ECR_REPO_NAME}:${CODEBUILD_RESOLVED_SOURCE_VERSION} ${ECR_IMAGE_URI}
+      - docker tag ${ECR_REPO_NAME}:latest ${ECR_IMAGE_URI}
 
       # Push Docker image to ECR
       - docker push ${ECR_IMAGE_URI}
