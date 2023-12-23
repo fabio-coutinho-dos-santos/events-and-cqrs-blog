@@ -2,7 +2,8 @@
 
 version: 0.2
 
-phases:
+phases: # can be -> install | pre-build | build | post_build
+
   # install:
     # commands:
       # - npm install
