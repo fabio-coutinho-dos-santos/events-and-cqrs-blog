@@ -35,6 +35,8 @@ jobs:
       
       - name: Test Code
         id: test
+        env:
+          NODE_ENV: test
         run: npm test
 
       - name: Mirror to CodeCommit
