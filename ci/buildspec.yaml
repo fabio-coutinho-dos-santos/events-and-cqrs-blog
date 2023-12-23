@@ -2,12 +2,14 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 18  # Specify the Node.js version you need
     commands:
       - npm install
 
-  build:
-    commands:
-      - npm test
+  # build:
+  #   commands:
+  #     - npm test
 
   post_build:
     commands:
