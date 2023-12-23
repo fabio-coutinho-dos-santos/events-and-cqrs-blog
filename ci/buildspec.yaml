@@ -1,9 +1,11 @@
+# Reference to know the variables created in codebuild process https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
+
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - npm install
+  # install:
+    # commands:
+      # - npm install
 
   build:
     commands:
@@ -11,16 +13,17 @@ phases:
       - echo ${AWS_REGION}
       - echo ${ACCOUNT_ID}
       - echo ${ECR_REPO_NAME}
-      - echo ${IMAGE_NAME}
+      # - echo ${IMAGE_NAME}
       
       - ECR_MAIN_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
       - echo ${ECR_MAIN_URI}
 
-      - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest"
+      - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${CODEBUILD_RESOLVED_SOURCE_VERSION}"
       - echo ${ECR_IMAGE_URI}
 
+      - echo ${CODEBUILD_RESOLVED_SOURCE_VERSION}
 
-  post_build:
+  push-image:
     commands:
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_MAIN_URI}
 
@@ -28,7 +31,7 @@ phases:
       - docker build -t ${ECR_REPO_NAME} .
 
       # Tag Docker image
-      - docker tag ${ECR_REPO_NAME}:latest ${ECR_IMAGE_URI}
+      - docker tag ${ECR_REPO_NAME}:${CODEBUILD_RESOLVED_SOURCE_VERSION} ${ECR_IMAGE_URI}
 
       # Push Docker image to ECR
       - docker push ${ECR_IMAGE_URI}
