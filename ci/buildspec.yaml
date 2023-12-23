@@ -1,21 +1,40 @@
 # Reference to know the variables created in codebuild process https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
+# to push the image on ECR is necessary give the follow permision to role atached in the cloudbuild project:
+# {
+#   "Version": "2012-10-17",
+#   "Statement": [
+#       {
+#           "Effect": "Allow",  
+#           "Action": [
+#               "ecr:BatchCheckLayerAvailability",
+#               "ecr:CompleteLayerUpload",
+#               "ecr:GetAuthorizationToken",
+#               "ecr:InitiateLayerUpload",
+#               "ecr:PutImage",
+#               "ecr:UploadLayerPart"
+#             ],
+#           "Resource": "*"
+#       }
+#   ]
+# }
+# to apply this permission will need to go to IAM->Roles, select the <cloudbuild-project-role> create a inline permission with the content above
 
 version: 0.2
 
 phases: # can be -> install | pre-build | build | post_build
 
-  # install:
-    # commands:
-      # - npm install
-
-  build:
+  install:
     commands:
-      # - npm test
+      - npm install
+
+  pre-build:
+    commands:
+      # Variables come from CodeBuild project environment
       - echo ${AWS_REGION}
       - echo ${ACCOUNT_ID}
       - echo ${ECR_REPO_NAME}
-      # - echo ${IMAGE_NAME}
-      
+      #===============================================
+
       - ECR_MAIN_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
       - echo ${ECR_MAIN_URI}
 
@@ -27,6 +46,10 @@ phases: # can be -> install | pre-build | build | post_build
       - ECR_IMAGE_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${SHORT_COMMIT_HASH}"
       - echo ${ECR_IMAGE_URI}
 
+  build:
+    commands:
+      - npm test
+      
   post_build:
     commands:
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_MAIN_URI}
@@ -40,23 +63,4 @@ phases: # can be -> install | pre-build | build | post_build
       # Push Docker image to ECR
       - docker push ${ECR_IMAGE_URI}
 
-      # to push the image on ECR is necessary give the follow permision to role atached in the cloudbuild project:
-      # {
-      #   "Version": "2012-10-17",
-      #   "Statement": [
-      #       {
-      #           "Effect": "Allow",  
-      #           "Action": [
-      #               "ecr:BatchCheckLayerAvailability",
-      #               "ecr:CompleteLayerUpload",
-      #               "ecr:GetAuthorizationToken",
-      #               "ecr:InitiateLayerUpload",
-      #               "ecr:PutImage",
-      #               "ecr:UploadLayerPart"
-      #             ],
-      #           "Resource": "*"
-      #       }
-      #   ]
-      # }
-      # to apply this permission will need to go to IAM->Roles, select the <cloudbuild-project-role> create a inline permission with the content above
 
