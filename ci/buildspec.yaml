@@ -2,9 +2,10 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      nodejs: 18  # Specify the Node.js version you need
     commands:
+      - apt-get update -y
+      - apt-get install -y nodejs npm
+      - npm -v
       - npm install
 
   # build:
