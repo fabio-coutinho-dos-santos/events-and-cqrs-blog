@@ -7,6 +7,7 @@ create-app:
 	@npm i -D jest typescript
 	@npm i -D ts-jest @types/jest
 	@npm i eslint -D
+	@npm i supertest @types/supertest -D
 	@npm i sqlite3  -E
 # - create scripts inside package json:
 #- "scripts": {
